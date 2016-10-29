@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% for a in articles %}
+    {{% if a.id ==  article_id %}}
+      {{p = a}}
+    {% endif %}
+  {% endfor %}
+
+<h2>Editing</h2>
+<form method="post">
+  <label>
+    <div>Subject</div>
+    <input type="text" name="subject" value="{{p.subject}}">
+  </label>
+
+  <label>
+    <div>Content</div>
+      <textarea name="content">{{p.content}}</textarea>
+  </label>
+
+  <div class="error">{{p.error}}</div>
+  <button type="button" id="submitBtn" name="submitBtn">Submit</button>
+</form>
+
+{% endblock %}

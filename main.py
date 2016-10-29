@@ -171,6 +171,38 @@ class PostPage(Handler):
             error = "We need both a subject and an article body!"
             self.render("post.html", subject=subject, content=content, error=error)
 
+class EditPost(Handler):
+    def get(self, article_id):
+        if self.user:
+            self.render("editpost.html")
+        else:
+            self.redirect("/blog/login")
+
+    def post(self, article_id):
+        if not self.user:
+            self.redirect('/blog')
+
+        key = db.Key.from_path('Article', int(article_id), parent=blog_key())
+
+        subject = self.request.get('subject')
+        content = self.request.get('content')
+        # liking_users = self.request.get('liking_users')
+
+        if subject and content:
+            uid = int(self.read_secure_cookie('user_id')) # For identifying who wrote an article
+            a = article_id.get() # Retrieve the article to update by its ID
+            a.subject = subject # Update its subject
+            a.content = content # Update its content
+            # a.liking_users = liking_users # Update liking users
+            a.put() # Actually save the new data
+            self.write(json.dumps(({'redirect_url': '/blog/' + blog_id}))) # Prepare to redirect
+
+            # Old redirect
+            self.redirect('/blog/%s' % str(a.key().id()))
+        else:
+            error = "We need both a subject and an article body!"
+            self.render("post.html", subject=subject, content=content, error=error)
+
 class NewPost(Handler):
     def get(self):
         if self.user:
@@ -344,5 +376,5 @@ class MainPage(Handler):
         self.render_front()
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage), ('/blog/?', BlogFront), ('/blog/([0-9]+)', PostPage), ('/blog/newpost', NewPost), ('/blog/signup', Register), ('/blog/login', Login), ('/blog/logout', Logout), ('/blog/welcome', Welcome),
+    ('/', MainPage), ('/blog/?', BlogFront), ('/blog/([0-9]+)', PostPage), ('/blog/edit/', EditPost), ('/blog/newpost', NewPost), ('/blog/signup', Register), ('/blog/login', Login), ('/blog/logout', Logout), ('/blog/welcome', Welcome),
 ], debug=True)

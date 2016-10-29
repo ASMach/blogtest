@@ -1,5 +1,5 @@
 <!--jQuery is used for some POST methods in this project-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 <div class="post">
   <div class="post-heading">
@@ -8,6 +8,9 @@
     </div>
     <div>
       <h4>By {{u.by_id(p.author_id).name}}</h4>
+    </div>
+    <div>
+      Post ID: {{p.id}}
     </div>
     <div class="post-date">
       {{p.created.strftime("%b %d, %Y")}}
@@ -26,7 +29,7 @@
   <br>
   <br>
   {% if user and user.name == u.by_id(p.author_id).name %} <!--Makes sure the author is logged in-->
-      <a href="#" onclick="toggle_visibility('editing');">Edit</a> <a href="#" onclick="delete_post({{p.id}});">Delete</a>
+      <!--<a href="#" onclick="toggle_visibility('editing');">--><a href="../blog/edit/">Edit</a> <a href="#" onclick="delete_post({{p.id}});">Delete</a>
       {% if p.liking_users %} <!--Check if we have any likes for the post-->
         {% if p.liking_users(p.author_id) %} <!--See if we have already liked this post-->
           <a href="#" onclick="unlike_post({{p.id}})">Unlike</a>
@@ -36,23 +39,10 @@
       {% else %}
         <a href="#" onclick="like_post({{p.id}})">Like</a>
       {% endif %}
+      <!--
       <div class="post-edit" id="editing">
-        <h2>Editing</h2>
-        <form method="post">
-          <label>
-            <div>Subject</div>
-            <input type="text" name="subject" value="{{p.subject}}">
-          </label>
-
-          <label>
-            <div>Content</div>
-              <textarea name="content">{{p.content}}</textarea>
-            </label>
-
-          <div class="error">{{p.error}}</div>
-          <button type="button" id="submitBtn" name="submitBtn">Submit</button>
-        </form>
       </div>
+      -->
     {% else %}
       <div class="error">You do not have permission to modify this article</div>
     {% endif %}
