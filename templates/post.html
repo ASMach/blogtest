@@ -10,7 +10,7 @@
       <h4>By {{u.by_id(p.author_id).name}}</h4>
     </div>
     <div>
-      Post ID: {{p.id}}
+      Post ID: {{p.id}} <!--This is returning null. Why is post id returning null?-->
     </div>
     <div class="post-date">
       {{p.created.strftime("%b %d, %Y")}}
@@ -29,7 +29,7 @@
   <br>
   <br>
   {% if user and user.name == u.by_id(p.author_id).name %} <!--Makes sure the author is logged in-->
-      <!--<a href="#" onclick="toggle_visibility('editing');">--><a href="../blog/edit/">Edit</a> <a href="#" onclick="delete_post({{p.id}});">Delete</a>
+      <!--<a href="#" onclick="toggle_visibility('editing');">--><a href="../blog/edit/">Edit</a><!--TODO: Pass id of post to editing page--> <a href="#" onclick="delete_post({{p.id}});">Delete</a>
       {% if p.liking_users %} <!--Check if we have any likes for the post-->
         {% if p.liking_users(p.author_id) %} <!--See if we have already liked this post-->
           <a href="#" onclick="unlike_post({{p.id}})">Unlike</a>
