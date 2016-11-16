@@ -2,11 +2,12 @@
 
 {% block content %}
 
-{% for a in articles %}
-    {{% if a.id ==  article_id %}}
-      {{p = a}}
-    {% endif %}
-  {% endfor %}
+{% for a in articles if a.id ==  article_id %}
+  {% if a.key().id() ==  article_id %}
+    {{a.key().id()}}
+    {% set p = a %}
+  {% endif %}
+{% endfor %}
 
 <h2>Editing</h2>
 <form method="post">

@@ -10,7 +10,7 @@
       <h4>By {{u.by_id(p.author_id).name}}</h4>
     </div>
     <div>
-      Post ID: {{p.id}} <!--This is returning null. Why is post id returning null?-->
+      Post ID: {{p.key().id()}} <!--This is returning null. Why is post id returning null?-->
     </div>
     <div class="post-date">
       {{p.created.strftime("%b %d, %Y")}}
@@ -29,15 +29,15 @@
   <br>
   <br>
   {% if user and user.name == u.by_id(p.author_id).name %} <!--Makes sure the author is logged in-->
-      <!--<a href="#" onclick="toggle_visibility('editing');">--><a href="../blog/edit/">Edit</a><!--TODO: Pass id of post to editing page--> <a href="#" onclick="delete_post({{p.id}});">Delete</a>
+      <!--<a href="#" onclick="toggle_visibility('editing');">--><a href="../blog/edit/{{p.key().id()}}">Edit</a><!--TODO: Pass id of post to editing page--> <a href="#" onclick="delete_post({{p.key().id()}});">Delete</a>
       {% if p.liking_users %} <!--Check if we have any likes for the post-->
         {% if p.liking_users(p.author_id) %} <!--See if we have already liked this post-->
-          <a href="#" onclick="unlike_post({{p.id}})">Unlike</a>
+          <a href="#" onclick="unlike_post({{p.key().id()}})">Unlike</a>
         {% else %}
-          <a href="#" onclick="like_post({{p.id}})">Like</a>
+          <a href="#" onclick="like_post({{pp.key().id()}})">Like</a>
         {% endif %}
       {% else %}
-        <a href="#" onclick="like_post({{p.id}})">Like</a>
+        <a href="#" onclick="like_post({{p.key().id()}})">Like</a>
       {% endif %}
       <!--
       <div class="post-edit" id="editing">

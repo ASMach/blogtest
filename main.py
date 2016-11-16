@@ -173,7 +173,16 @@ class PostPage(Handler):
 
 class EditPost(Handler):
     def get(self, article_id):
+        articles = db.GqlQuery("SELECT * FROM Article ORDER BY created DESC")
+        # Only try to get the article to be edited if we have a user
         if self.user:
+            key = db.Key.from_path('Article', int(article_id), parent=blog_key())
+            article = db.get(key)
+
+            if not article:
+                self.error(404)
+                return
+
             self.render("editpost.html")
         else:
             self.redirect("/blog/login")
@@ -376,5 +385,5 @@ class MainPage(Handler):
         self.render_front()
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage), ('/blog/?', BlogFront), ('/blog/([0-9]+)', PostPage), ('/blog/edit/', EditPost), ('/blog/newpost', NewPost), ('/blog/signup', Register), ('/blog/login', Login), ('/blog/logout', Logout), ('/blog/welcome', Welcome),
+    ('/', MainPage), ('/blog/?', BlogFront), ('/blog/([0-9]+)', PostPage), ('/blog/edit/([0-9]+)', EditPost), ('/blog/newpost', NewPost), ('/blog/signup', Register), ('/blog/login', Login), ('/blog/logout', Logout), ('/blog/welcome', Welcome),
 ], debug=True)
