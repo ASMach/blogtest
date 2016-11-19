@@ -2,27 +2,23 @@
 
 {% block content %}
 
-{% for a in articles if a.id ==  article_id %}
-  {% if a.key().id() ==  article_id %}
-    {{a.key().id()}}
-    {% set p = a %}
-  {% endif %}
-{% endfor %}
+{% set article_id = article.key().id()%}
 
 <h2>Editing</h2>
+
 <form method="post">
   <label>
     <div>Subject</div>
-    <input type="text" name="subject" value="{{p.subject}}">
+    <input type="text" name="subject" value="{{article.subject}}">
   </label>
 
   <label>
     <div>Content</div>
-      <textarea name="content">{{p.content}}</textarea>
+      <textarea name="content">{{article.content}}</textarea>
   </label>
 
-  <div class="error">{{p.error}}</div>
-  <button type="button" id="submitBtn" name="submitBtn">Submit</button>
+  <div class="error">{{article.error}}</div>
+  <input type="submit">
 </form>
 
 {% endblock %}

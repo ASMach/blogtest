@@ -173,7 +173,7 @@ class PostPage(Handler):
 
 class EditPost(Handler):
     def get(self, article_id):
-        articles = db.GqlQuery("SELECT * FROM Article ORDER BY created DESC")
+        # articles = db.GqlQuery("SELECT * FROM Article ORDER BY created DESC")
         # Only try to get the article to be edited if we have a user
         if self.user:
             key = db.Key.from_path('Article', int(article_id), parent=blog_key())
@@ -183,7 +183,7 @@ class EditPost(Handler):
                 self.error(404)
                 return
 
-            self.render("editpost.html")
+            self.render("editpost.html", article = article)
         else:
             self.redirect("/blog/login")
 
@@ -199,6 +199,8 @@ class EditPost(Handler):
 
         if subject and content:
             uid = int(self.read_secure_cookie('user_id')) # For identifying who wrote an article
+
+            #article = webapp2.request.get('article') # a = article
             a = article_id.get() # Retrieve the article to update by its ID
             a.subject = subject # Update its subject
             a.content = content # Update its content
@@ -206,11 +208,11 @@ class EditPost(Handler):
             a.put() # Actually save the new data
             self.write(json.dumps(({'redirect_url': '/blog/' + blog_id}))) # Prepare to redirect
 
-            # Old redirect
-            self.redirect('/blog/%s' % str(a.key().id()))
+            # Redirect
+            self.redirect('/blog/%s' % str(article.key().id()))
         else:
             error = "We need both a subject and an article body!"
-            self.render("post.html", subject=subject, content=content, error=error)
+            self.render("editpost.html", article = article)
 
 class NewPost(Handler):
     def get(self):
