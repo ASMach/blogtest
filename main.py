@@ -200,8 +200,7 @@ class EditPost(Handler):
         if subject and content:
             uid = int(self.read_secure_cookie('user_id')) # For identifying who wrote an article
 
-            #article = webapp2.request.get('article') # a = article
-            a = article_id.get() # Retrieve the article to update by its ID
+            a = db.get(int(article_id)) # Retrieve the article to update by its ID TODO: Fix BadArgumentError
             a.subject = subject # Update its subject
             a.content = content # Update its content
             # a.liking_users = liking_users # Update liking users
