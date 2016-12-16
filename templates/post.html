@@ -16,6 +16,7 @@
       if (confirm('Delete this post?')) {
         alert('URL: ../blog/' + id)
         $.ajax({
+          URL: '../blog/' + id
           type: 'DELETE',
           success: function(result) {
           alert('Deleted post');
@@ -24,7 +25,7 @@
       } else {
         alert('Post not deleted');
       }
-    }
+  }
 
   function like_post(id) {
     // TODO: Add user id to p.liking users
