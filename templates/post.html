@@ -1,6 +1,43 @@
 <!--jQuery is used for some POST methods in this project-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
+<script type="text/javascript">
+  <!--
+    function toggle_visibility(id) {
+       var element = document.getElementById(id);
+       if(element.style.display == 'block')
+          element.style.display = 'none';
+       else
+          element.style.display = 'block';
+    }
+
+  function delete_post(id) {
+      // TODO: Delete the selected post
+      if (confirm('Delete this post?')) {
+        alert('URL: ../blog/' + id)
+        $.ajax({
+          type: 'DELETE',
+          success: function(result) {
+          alert('Deleted post');
+          }
+        });
+      } else {
+        alert('Post not deleted');
+      }
+    }
+
+  function like_post(id) {
+    // TODO: Add user id to p.liking users
+    alert("Liked post!");
+  }
+
+  function unlike_post(id) {
+    // TODO: Remove user id from p.liking users
+    alert("Uniked post!");
+  }
+  //-->
+</script>
+
 <div class="post">
   <div class="post-heading">
     <div class="post-title">
@@ -9,9 +46,11 @@
     <div>
       <h4>By {{u.by_id(p.author_id).name}}</h4>
     </div>
+    <!--
     <div>
-      Post ID: {{p.key().id()}} <!--This is returning null. Why is post id returning null?-->
+      Post ID: {{p.key().id()}}
     </div>
+    -->
     <div class="post-date">
       {{p.created.strftime("%b %d, %Y")}}
     </div>

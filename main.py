@@ -21,6 +21,7 @@ import os
 import random
 import hashlib
 import hmac
+import json
 
 import webapp2
 import jinja2
@@ -163,7 +164,32 @@ class PostPage(Handler):
             a.content = content # Update its content
             # a.liking_users = liking_users # Update liking users
             a.put() # Actually save the new data
-            self.write(json.dumps(({'redirect_url': '/blog/' + blog_id}))) # Prepare to redirect
+            self.write(json.dumps(({'redirect_url': '/blog/' + article_id}))) # Prepare to redirect
+
+            # Old redirect
+            self.redirect('/blog/%s' % str(a.key().id()))
+        else:
+            error = "We need both a subject and an article body!"
+            self.render("post.html", subject=subject, content=content, error=error)
+
+    def delete(self, article_id):
+        if not self.user:
+            self.redirect('/blog')
+
+        key = db.Key.from_path('Article', int(article_id), parent=blog_key())
+
+        subject = self.request.get('subject')
+        content = self.request.get('content')
+        #liking_users = self.request.get('liking_users')
+
+        if subject and content:
+            uid = int(self.read_secure_cookie('user_id')) # For identifying who wrote an article
+            a = article_id.get() # Retrieve the article to update by its ID
+            a.subject = subject # Update its subject
+            a.content = content # Update its content
+            a.liking_users = liking_users # Update liking users
+            a.article_id.delete() # Actually delete the data
+            self.write(json.dumps(({'redirect_url': '/blog/' + article_id}))) # Prepare to redirect
 
             # Old redirect
             self.redirect('/blog/%s' % str(a.key().id()))
@@ -200,12 +226,12 @@ class EditPost(Handler):
         if subject and content:
             uid = int(self.read_secure_cookie('user_id')) # For identifying who wrote an article
 
-            a = db.get(int(article_id)) # Retrieve the article to update by its ID TODO: Fix BadArgumentError
-            a.subject = subject # Update its subject
-            a.content = content # Update its content
+            article = db.get(key) # Retrieve the article to update by its ID TODO: Fix BadArgumentError
+            article.subject = subject # Update its subject
+            article.content = content # Update its content
             # a.liking_users = liking_users # Update liking users
-            a.put() # Actually save the new data
-            self.write(json.dumps(({'redirect_url': '/blog/' + blog_id}))) # Prepare to redirect
+            article.put() # Actually save the new data
+            self.write(json.dumps(({'redirect_url': '/blog/' + article_id}))) # Prepare to redirect
 
             # Redirect
             self.redirect('/blog/%s' % str(article.key().id()))
