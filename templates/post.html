@@ -16,7 +16,8 @@
       if (confirm('Delete this post?')) {
         alert('URL: ../blog/' + id)
         $.ajax({
-          URL: '../blog/' + id,
+          url: '../blog/' + id,
+          //url : 'main.py',
           type: 'DELETE',
           success: function(result) {
           alert('Deleted post');
