@@ -14,10 +14,10 @@
   function delete_post(id) {
       // TODO: Delete the selected post
       if (confirm('Delete this post?')) {
-        alert('URL: http://blogtest-1470088378334.appspot.com/blog/' + id)
+        alert('URL: /blog/' + id)
         $.ajax({
           // Add full url
-          url: 'http://blogtest-1470088378334.appspot.com/blog/' + id,
+          url: '/blog/' + id,
           //url : 'main.py',
           type: 'DELETE',
           success: function(result) {

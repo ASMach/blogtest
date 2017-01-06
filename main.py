@@ -177,25 +177,15 @@ class PostPage(Handler):
             self.redirect('/blog')
 
         key = db.Key.from_path('Article', int(article_id), parent=blog_key())
+        article = db.get(key)
 
-        subject = self.request.get('subject')
-        content = self.request.get('content')
-        #liking_users = self.request.get('liking_users')
+        if not article:
+            self.error(404)
+            return
 
-        if subject and content:
-            uid = int(self.read_secure_cookie('user_id')) # For identifying who wrote an article
-            a = article_id.get() # Retrieve the article to update by its ID
-            a.subject = subject # Update its subject
-            a.content = content # Update its content
-            a.liking_users = liking_users # Update liking users
-            a.article_id.delete() # Actually delete the data
-            self.write(json.dumps(({'redirect_url': '/blog/' + article_id}))) # Prepare to redirect
-
-            # Old redirect
-            self.redirect('/blog/%s' % str(a.key().id()))
-        else:
-            error = "We need both a subject and an article body!"
-            self.render("post.html", subject=subject, content=content, error=error)
+        article.delete() # Actually delete the data
+        self.write(json.dumps(({'redirect_url': '/blog/' + article_id}))) # Prepare to redirect
+        self.redirect('/blog')
 
 class EditPost(Handler):
     def get(self, article_id):
